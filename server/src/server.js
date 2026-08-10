@@ -3,13 +3,11 @@ require("dotenv").config();
 const app = require("./app");
 
 const { connectRedis } = require("./config/redis");
-const { testMailConnection } = require("./config/mail");
 const PORT = process.env.PORT || 5005;
 
 const startServer = async () => {
     try {
         await connectRedis();
-        await testMailConnection();
 
         app.listen(PORT, () => {
             console.log(`app is listen on PORT ${PORT}`);

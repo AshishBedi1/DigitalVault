@@ -1,4 +1,5 @@
-const {createUser} = require("../services/auth.service");
+const { fa } = require("zod/v4/locales");
+const {createUser , verifyUserEmail} = require("../services/auth.service");
 const { registerSchema } = require("../validation/auth.validation");
 const { zodError, success } = require("zod");
 
@@ -22,6 +23,25 @@ const registerUser = async(req, res) => {
     }
 }
 
+const verifyEmail = async(res,req) => {
+    try{
+        const {token} = req.params;
+        const result = await verifyUserEmail(token);
+        if(!result.success){
+            return res.success(400).json(result);
+        }
+        res.status(200).json(result);
+
+    }catch(error){
+        console.error("Email verification error", error);
+        res.status(500).json({
+            success:false,
+            message:"internal server error"
+        })
+    }
+}
+
 module.exports = {
-    registerUser
+    registerUser,
+    verifyEmail
 }
